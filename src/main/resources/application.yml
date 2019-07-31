@@ -1,2 +1,9 @@
 server:
   port: 7001
+
+github:
+  client:
+    id: 72d4490a6a78007d0d4b
+    secret: 96e0bf3db875914a3a681b34a218008793ca281f
+  redirect:
+    uri: http://localhost:7001/callback
