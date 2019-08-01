@@ -4,6 +4,7 @@ import com.wool.community.mapper.UserMapper;
 import com.wool.community.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.Cookie;
@@ -23,21 +24,13 @@ public class IndexController {
      * 访问首页
      */
     @RequestMapping("/")
-    public String index(HttpServletRequest request){
+    public String index(HttpServletRequest request, @CookieValue(name = "token",required = false)String token){
         // 判断是否携带token并且是否和数据库中的token一致
-        Cookie[] cookies = request.getCookies();
-        if(cookies!=null && cookies.length!=0){
-            for (Cookie cookie : cookies) {
-                if(cookie.getName().equals("token")){
-                    String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
-                    System.out.println(user);
-                    if(user != null){
-                        HttpSession session = request.getSession();
-                        session.setAttribute("user",user);
-                    }
-                    break;
-                }
+        if(token!=null&&token.length()!=0){
+            User user = userMapper.findByToken(token);
+            if(user != null){
+                HttpSession session = request.getSession();
+                session.setAttribute("user",user);
             }
         }
         return "index";
