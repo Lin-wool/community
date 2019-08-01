@@ -1,4 +1,4 @@
-package com.wool.community.entity;
+package com.wool.community.dto;
 
 public class GitHubUser {
     private Long id;
