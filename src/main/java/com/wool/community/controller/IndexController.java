@@ -20,17 +20,18 @@ public class IndexController {
 
     @Autowired
     private UserMapper userMapper;
+
     /**
      * 访问首页
      */
     @RequestMapping("/")
-    public String index(HttpServletRequest request, @CookieValue(name = "token",required = false)String token){
+    public String index(HttpServletRequest request, @CookieValue(name = "token", required = false) String token) {
         // 判断是否携带token并且是否和数据库中的token一致
-        if(token!=null&&token.length()!=0){
+        if (token != null && token.length() != 0) {
             User user = userMapper.findByToken(token);
-            if(user != null){
+            if (user != null) {
                 HttpSession session = request.getSession();
-                session.setAttribute("user",user);
+                session.setAttribute("user", user);
             }
         }
         return "index";
