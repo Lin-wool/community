@@ -19,6 +19,5 @@ spring:
 
 # 配置mybatis全局配置所在位置已经mapper配置文件所在位置
 mybatis:
-  config-location: classpath:mybatis/mybatis-config.xml
-  mapper-locations: classpath:mybatis/mapper/*.xml
-  type-aliases-package: com.wool.community.model
+  configuration:
+    map-underscore-to-camel-case: true

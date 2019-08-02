@@ -46,15 +46,23 @@ public class AuthorizeController {
         String accessToken = gitHubProvider.getAccessToken(accessTokenDto);
         GitHubUser gitHubUser = gitHubProvider.getUser(accessToken);
         if (gitHubUser != null && gitHubUser.getId() != null) {
-            // 登录成功，存入session和cookie
-            User user = new User();
-            user.setName(gitHubUser.getName());
-            user.setToken(UUID.randomUUID().toString());
-            user.setAccountId(String.valueOf(gitHubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
-            user.setBio(gitHubUser.getBio());
-            userMapper.insertUser(user);
+            User user = userMapper.findByAccountId(String.valueOf(gitHubUser.getId()));
+            if(user==null){
+                // 登录成功，存入session和cookie
+                user = new User();
+                user.setName(gitHubUser.getName());
+                user.setToken(UUID.randomUUID().toString());
+                user.setAccountId(String.valueOf(gitHubUser.getId()));
+                user.setGmtCreate(System.currentTimeMillis());
+                user.setGmtModified(user.getGmtCreate());
+                user.setBio(gitHubUser.getBio());
+                user.setAvatarUrl(gitHubUser.getAvatar_url());
+                userMapper.insertUser(user);
+            }else{
+                String token = UUID.randomUUID().toString();
+                user.setToken(token);
+                userMapper.updateToken(user);
+            }
             response.addCookie(new Cookie("token", user.getToken()));
             return "redirect:/";
         } else {
