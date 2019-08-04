@@ -21,4 +21,6 @@ public class QuestionDTO {
     private Long dislikeCount;
     private String tag;
     private User user;
+
+
 }

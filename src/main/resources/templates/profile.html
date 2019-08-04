@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wool-Community</title>
+    <!-- 引入bootstrap样式、自定义css以及js start-->
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- 引入bootstrap样式以及js end-->
+
+
+</head>
+<body>
+<div th:replace="navigation::navbar-header"></div>
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2 th:text="${sectionName}"></h2>
+            <hr>
+            <div class="media" th:each="question:${paginationDTO.questionDTOList}">
+                <a class="pull-left" href="#">
+                    <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading">
+                        <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a>
+                    </h4>
+                    <span th:text="${question.description}"></span> <br>
+                    <span class="text-desc">
+                          •<span th:text="${question.getCommentCount()}"></span>个回复
+                          •<span th:text="${question.getViewCount()}"></span> 次浏览
+                          •发布时间：<span th:text="${#dates.format(question.getGmtCreate(),'yyyy-MM-dd HH:mm:ss')}"></span></span>
+                </div>
+            </div>
+            <ul class="pagination">
+
+                <li><a th:href="@{'/profile/'+${section}(page=${1})}" th:if="${paginationDTO.showFirstPage}">&laquo;</a></li>
+                <li><a th:href="@{'/profile/'+${section}(page=${paginationDTO.page}-1)}"  th:if="${paginationDTO.showPrevious}">&lsaquo;</a></li>
+                <li th:each="page:${paginationDTO.pages}" th:class="${paginationDTO.page==page}?'active':''">
+                    <a th:href="@{'/profile/'+${section}(page=${page})}" th:text="${page}"></a>
+                </li>
+                <li><a th:href="@{'/profile/'+${section}(page=${paginationDTO.page}+1)}" th:if="${paginationDTO.showNext}">&rsaquo;</a></li>
+                <li><a th:href="@{'/profile/'+${section}(page=${paginationDTO.totalPage})}" th:if="${paginationDTO.showEndPage}">&raquo;</a></li>
+            </ul>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 profile">
+            <div class="list-group section">
+                <a href="/profile/questions" th:class="${section=='questions'}?'list-group-item active' : 'list-group-item'">我的问题</a>
+                <a href="/profile/replies" th:class="${section=='replies'}?'list-group-item active' : 'list-group-item'">最新回复 <span class="badge">14</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

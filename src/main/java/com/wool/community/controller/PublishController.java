@@ -4,17 +4,16 @@ import com.wool.community.mapper.QuestionMapper;
 import com.wool.community.mapper.UserMapper;
 import com.wool.community.model.Question;
 import com.wool.community.model.User;
-import org.apache.ibatis.annotations.Param;
+import com.wool.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author WOOL
@@ -27,6 +26,19 @@ public class PublishController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private QuestionService questionService;
+
+    @GetMapping(value = "/publish/{id}")
+    public String editQuestion(@PathVariable("id")Long id,Model model){
+        Question question = questionMapper.selectByPrimaryKey(id);
+        model.addAttribute("title", question.getTitle());
+        model.addAttribute("description", question.getDescription());
+        model.addAttribute("tag", question.getTag());
+        model.addAttribute("id",id);
+        return "/publish";
+    }
 
     /**
      * 跳转到发布页面
@@ -47,17 +59,14 @@ public class PublishController {
     public String doPublish(@RequestParam(value = "title", required = false) String title,
                             @RequestParam(value = "description", required = false) String description,
                             @RequestParam(value = "tag", required = false) String tag,
+                            @RequestParam(value = "id", required = false) Long id,
                             HttpServletRequest request,
-                            @CookieValue(name = "token", required = false) String token,
                             Model model) {
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
-        // 判断是否携带token并且是否和数据库中的token一致
-        User user = null;
-        if (token != null && token.length() != 0) {
-            user = userMapper.findByToken(token);
-        }
+
+        User user = (User) request.getSession().getAttribute("user");
         // 验证用户是否登录
         if (user == null) {
             model.addAttribute("error", "用户未登录！");
@@ -77,13 +86,14 @@ public class PublishController {
             return "/publish";
         }
         Question question = new Question();
+        question.setId(id);
         question.setTag(tag);
         question.setTitle(title);
         question.setCreator(user.getId());
         question.setDescription(description);
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(question.getGmtCreate());
-        questionMapper.insertQuestion(question);
+        questionService.createOrUpdate(question);
         return "redirect:/";
     }
+
+
 }
