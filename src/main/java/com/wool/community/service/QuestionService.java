@@ -2,6 +2,9 @@ package com.wool.community.service;
 
 import com.wool.community.dto.PaginationDTO;
 import com.wool.community.dto.QuestionDTO;
+import com.wool.community.exception.CustomizeErrorCode;
+import com.wool.community.exception.CustomizeException;
+import com.wool.community.mapper.QuestionExtMapper;
 import com.wool.community.mapper.QuestionMapper;
 import com.wool.community.mapper.UserMapper;
 import com.wool.community.model.Question;
@@ -28,6 +31,9 @@ public class QuestionService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     /**
      * 返回问题传输对象（包含用户信息）
@@ -106,6 +112,9 @@ public class QuestionService {
 
     public QuestionDTO findById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if(question==null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         if (question != null) {
@@ -128,11 +137,25 @@ public class QuestionService {
             question.setGmtModified(System.currentTimeMillis());
             QuestionExample example = new QuestionExample();
             example.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(question, example);
+            int update = questionMapper.updateByExampleSelective(question, example);
+            if(update==0){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }else {
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
             questionMapper.insert(question);
         }
+    }
+
+    /**
+     * 阅读数+1
+     * @param id
+     */
+    public void incView(Long id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1L);
+        questionExtMapper.incView(question);
     }
 }

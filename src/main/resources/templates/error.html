@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wool-Community</title>
+    <!-- 引入bootstrap样式、自定义css以及js start-->
+    <link rel="stylesheet" th:href="@{/css/bootstrap-theme.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/community.css}">
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <!-- 引入bootstrap样式以及js end-->
+
+
+</head>
+<body>
+<div th:replace="navigation::navbar-header"></div>
+<div class="jumbotron">
+    <h1>出错啦！！！</h1>
+    <p th:text="${message}">服务器太热了，请稍后重试~~</p>
+    <p><a class="btn btn-primary btn-lg" href="/" role="button">回到主页</a></p>
+</div>
+</body>
+</html>

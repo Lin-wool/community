@@ -35,6 +35,23 @@ create table question
 	constraint question_pk primary key (id)
 );
 ```
+##comment
+```sql
+create table comment
+(
+	id bigint auto_increment,
+	parent_id bigint not null comment '评论的问题ID',
+	type int null comment '评论的级别 1：问题回复 2：评论回复',
+	commentator bigint null comment '评论人ID',
+	gmt_create bigint null comment '创建时间',
+	gmt_modified bigint null comment '修改时间',
+	like_count bigint default 0 null comment '点赞数',
+	constraint comment_pk primary key (id)
+)
+comment '问题评论表';
+```
 
-
-
+##mybatis generator脚本执行语句
+````
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+````

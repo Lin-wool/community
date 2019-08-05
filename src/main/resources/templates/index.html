@@ -25,7 +25,9 @@
                     <img class="media-object img-rounded" th:src="${question.user.getAvatarUrl()}">
                 </a>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${question.getTitle()}"></h4>
+                    <h4 class="media-heading">
+                        <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a>
+                    </h4>
                     <span th:text="${question.description}"></span> <br>
                     <span class="text-desc">
                           •<span th:text="${question.getCommentCount()}"></span>个回复
@@ -34,7 +36,6 @@
                 </div>
             </div>
             <ul class="pagination">
-
                 <li><a th:href="@{/(page=1)}" th:if="${paginationDTO.showFirstPage}">&laquo;</a></li>
                 <li><a th:href="@{/(page=${paginationDTO.page}-1)}" th:if="${paginationDTO.showPrevious}">&lsaquo;</a></li>
                 <li th:each="page:${paginationDTO.pages}" th:class="${paginationDTO.page==page}?'active':''">

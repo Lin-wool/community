@@ -36,7 +36,6 @@
                 </div>
             </div>
             <ul class="pagination">
-
                 <li><a th:href="@{'/profile/'+${section}(page=${1})}" th:if="${paginationDTO.showFirstPage}">&laquo;</a></li>
                 <li><a th:href="@{'/profile/'+${section}(page=${paginationDTO.page}-1)}"  th:if="${paginationDTO.showPrevious}">&lsaquo;</a></li>
                 <li th:each="page:${paginationDTO.pages}" th:class="${paginationDTO.page==page}?'active':''">
