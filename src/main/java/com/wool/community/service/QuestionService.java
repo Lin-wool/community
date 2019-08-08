@@ -45,7 +45,7 @@ public class QuestionService {
      */
     public PaginationDTO list(Integer page, Integer size) {
 
-        PaginationDTO paginationDTO = new PaginationDTO();
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         // 审核page大小
         if (page < 1) {
             page = 1;
@@ -53,7 +53,7 @@ public class QuestionService {
 
         Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
         Integer totalPage = paginationDTO.getTotalPage(totalCount, size);
-        if (page > totalPage) {
+        if (page > totalPage && page != 1) {
             page = totalPage;
         }
 
@@ -72,14 +72,14 @@ public class QuestionService {
             questionDTO.setUser(users.get(0));
             questionDTOList.add(questionDTO);
         }
-        paginationDTO.setQuestionDTOList(questionDTOList);
+        paginationDTO.setData(questionDTOList);
 
 
         return paginationDTO;
     }
 
     public PaginationDTO listByCreator(Long creator, Integer page, Integer size) {
-        PaginationDTO paginationDTO = new PaginationDTO();
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         // 审核page大小
         if (page < 1) {
             page = 1;
@@ -107,7 +107,7 @@ public class QuestionService {
             questionDTO.setUser(users.get(0));
             questionDTOList.add(questionDTO);
         }
-        paginationDTO.setQuestionDTOList(questionDTOList);
+        paginationDTO.setData(questionDTOList);
 
 
         return paginationDTO;

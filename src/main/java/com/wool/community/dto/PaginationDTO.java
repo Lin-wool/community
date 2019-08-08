@@ -16,8 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class PaginationDTO {
-    private List<QuestionDTO> questionDTOList;
+public class PaginationDTO<T> {
+    private List<T> data;
     private Boolean showPrevious;
     private Boolean showFirstPage;
     private Boolean showNext;
@@ -55,6 +55,6 @@ public class PaginationDTO {
 
     public Integer getTotalPage(Integer totalCount, Integer size) {
         totalPage = totalCount % size == 0 ? totalCount / size : totalCount / size + 1;
-        return totalPage;
+        return totalPage==0?1:totalPage;
     }
 }

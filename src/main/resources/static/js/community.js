@@ -61,7 +61,6 @@ function collapseComments(e) {
         comments.removeClass("in");
         $(e).removeClass("active");
     } else {
-        debugger;
         var subCommentContainer = $("#comment-" + id);
         if (subCommentContainer.children().length != 1) {
             comments.addClass("in");

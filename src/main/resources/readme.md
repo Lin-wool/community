@@ -55,3 +55,21 @@ comment '问题评论表';
 ````
 mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 ````
+
+##notification
+```sql
+create table notification
+(
+	id bigint auto_increment,
+	notifier bigint not null comment '评论通知者',
+	receiver bigint not null comment '被通知者',
+	outerId bigint not null comment '被评论得（问题或评论）ID',
+	type int not null comment '评论类型（问题或评论）',
+	gmt_create bigint not null comment '创建时间',
+	status int not null comment '是否已读',
+	constraint notification_pk primary key (id)
+)
+comment '评论通知';
+
+
+```

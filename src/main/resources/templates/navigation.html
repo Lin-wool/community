@@ -28,6 +28,10 @@
                             href="https://github.com/login/oauth/authorize?client_id=72d4490a6a78007d0d4b&redirect_uri=http://localhost:7001/callback&scope=user&state=1">登录</a>
                     </li>
                     <li th:if="${session.user}"><a href="/publish">提问</a></li>
+                    <li th:if="${session.user}">
+                        <a href="/profile/replies">通知  <span class="badge" th:text="${session.unReadCount}"></span></a>
+
+                    </li>
                     <li class="dropdown" th:if="${ session.user}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false" >

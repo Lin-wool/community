@@ -30,9 +30,9 @@
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发现</h2>
             <hr>
-            <div class="media" th:each="question:${paginationDTO.questionDTOList}">
+            <div class="media" th:each="question:${paginationDTO.data}">
                 <a class="pull-left" href="#">
-                    <img class="media-object img-rounded" th:src="${question.user.getAvatarUrl()}">
+                    <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
                 </a>
                 <div class="media-body">
                     <h4 class="media-heading">
@@ -41,8 +41,8 @@
                     <span th:text="${question.description}"></span> <br>
                     <span class="text-desc">
                           •<span th:text="${question.getCommentCount()}"></span>个回复
-                          •<span th:text="${question.getViewCount()}"></span> 次浏览
-                          •发布时间：<span th:text="${#dates.format(question.getGmtCreate(),'yyyy-MM-dd HH:mm:ss')}"></span></span>
+                          •<span th:text="${question.viewCount}"></span> 次浏览
+                          •发布时间：<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span></span>
                 </div>
             </div>
             <ul class="pagination">

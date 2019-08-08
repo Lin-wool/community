@@ -3,6 +3,7 @@ package com.wool.community.interceptor;
 import com.wool.community.mapper.UserMapper;
 import com.wool.community.model.User;
 import com.wool.community.model.UserExample;
+import com.wool.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -21,6 +22,9 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private NotificationService notificationService;
 
     /**
      * 处理请求前
@@ -42,6 +46,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                     List<User> users = userMapper.selectByExample(userExample);
                     if(users!=null&&users.size()!=0){
                         request.getSession().setAttribute("user",users.get(0));
+                        Long unReadCount = notificationService.unReadCount(users.get(0).getId());
+                        request.getSession().setAttribute("unReadCount",unReadCount);
                     }
                     break;
                 }
