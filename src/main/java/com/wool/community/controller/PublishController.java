@@ -1,5 +1,6 @@
 package com.wool.community.controller;
 
+import com.wool.community.cache.TagCache;
 import com.wool.community.mapper.QuestionMapper;
 import com.wool.community.mapper.UserMapper;
 import com.wool.community.model.Question;
@@ -31,12 +32,13 @@ public class PublishController {
     private QuestionService questionService;
 
     @GetMapping(value = "/publish/{id}")
-    public String editQuestion(@PathVariable("id")Long id,Model model){
+    public String editQuestion(@PathVariable("id") Long id, Model model) {
         Question question = questionMapper.selectByPrimaryKey(id);
         model.addAttribute("title", question.getTitle());
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
-        model.addAttribute("id",id);
+        model.addAttribute("id", id);
+        model.addAttribute("tags", TagCache.get());
         return "/publish";
     }
 
@@ -46,7 +48,8 @@ public class PublishController {
      * @return
      */
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("tags", TagCache.get());
         return "/publish";
     }
 

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Wool-Community</title>
+    <title>羊毛社区</title>
     <!-- 引入bootstrap样式、自定义css以及js start-->
     <link rel="stylesheet" th:href="@{/css/bootstrap-theme.min.css}">
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
@@ -14,6 +14,16 @@
 
 </head>
 <body>
+<script type="text/javascript">
+    window.onload=function () {
+        var closable = window.localStorage.getItem("closable");
+        if(closable == "true"){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+
+    }
+</script>
 <div th:replace="navigation::navbar-header"></div>
 <div class="container-fluid main">
     <div class="row">
@@ -45,6 +55,9 @@
                 <li><a th:href="@{/(page=${paginationDTO.totalPage})}"  th:if="${paginationDTO.showEndPage}">&raquo;</a></li>
             </ul>
         </div>
+
+
+
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h3>热门话题</h3>
         </div>

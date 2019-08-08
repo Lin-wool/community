@@ -9,6 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/community.css}">
     <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/community.js}"></script>
     <!-- 引入bootstrap样式以及js end-->
 
 
@@ -30,9 +31,36 @@
                     <label for="description">问题补充（必填，请参考右侧提示）：</label>
                     <textarea name="description" id="description" cols="30" rows="10" class="form-control" th:text="${description}"></textarea>
                 </div>
+                <!--添加标签-->
                 <div class="form-group">
-                    <label for="tag">添加标签：</label>
-                    <input type="text" class="form-control" name="tag" id="tag" placeholder="输入标签，以，隔开" th:value="${tag}">
+                    <label for="tag">添加标签:</label>
+                    <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag"
+                           autocomplete="off"
+                           placeholder="输入标签，以，号分隔"
+                           onclick="showSelectTag()">
+                    <div id="select-tag" class="publish-tag-tab">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" th:each="selectCategory,selectCategoryStat: ${tags}"
+                                th:class="${selectCategoryStat.first ? 'active':''}">
+                                <a th:href="${'#'+selectCategory.categoryName}" aria-controls="home" role="tab"
+                                   data-toggle="tab" th:text="${selectCategory.categoryName}"></a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" th:id="${selectCategory.categoryName}"
+                                 th:each="selectCategory: ${tags}"
+                                 th:class="${selectCategoryStat.first ? 'active tab-pane':'tab-pane'}">
+                                <span>
+                                    <span class="label label-info" th:each="selectTag: ${selectCategory.tags}">
+                                    <span class="glyphicon glyphicon-tags" onclick="selectTag(this)"
+                                          th:data-tag="${selectTag}"
+                                          th:text="${' '+selectTag}">
+                                    </span>
+                                </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="container-fluid">
                     <div class="row">
@@ -50,7 +78,7 @@
             <h3>问题发起指南</h3>
             • 问题标题: 请用精简的语言描述您发布的问题，不超过25字 <br>
             • 问题补充: 详细补充您的问题内容，并确保问题描述清晰直观, 并提供一些相关的资料<br>
-            • 选择标签: 选择一个或者多个合适的标签，用逗号隔开，每个标签不超过10个字<br>
+            • 选择标签: 选择一个或者多个合适的标签，用英文逗号隔开，每个标签不超过10个字<br>
         </div>
     </div>
 </div>
