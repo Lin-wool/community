@@ -57,4 +57,31 @@
         where id != #{id}
         and tag REGEXP #{tag}
     </select>
+
+    <!--通过问题关键字查出问题数据-->
+    <select id="countBySearch" parameterType="com.wool.community.dto.QuestionQueryDTO" resultType="java.lang.Integer">
+        select
+         count(*)
+        from question
+        <where>
+            <if test="search != null">
+                title REGEXP #{search}
+            </if>
+        </where>
+    </select>
+
+    <!--通过问题关键字查出问题数据-->
+    <select id="selectBySearch" parameterType="com.wool.community.dto.QuestionQueryDTO" resultMap="BaseResultMap">
+        select *
+        from question
+        <where>
+            <if test="search != null">
+                and title REGEXP #{search}
+            </if>
+        </where>
+        order by gmt_create desc
+        limit #{offset},#{size}
+    </select>
+
+
 </mapper>

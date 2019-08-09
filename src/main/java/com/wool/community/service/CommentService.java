@@ -36,6 +36,9 @@ public class CommentService {
     @Autowired
     private NotificationMapper notificationMapper;
 
+    @Autowired
+    private CommentExtMapper commentExtMapper;
+
     @Transactional(rollbackFor = Exception.class)
     public void insert(Comment comment, User creator) {
         if (comment.getParentId() == null || comment.getParentId() == 0) {
@@ -51,7 +54,7 @@ public class CommentService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
             question.setCommentCount(1L);
-            commentMapper.insert(comment);
+            commentMapper.insertSelective(comment);
 
             // 创建通知
             createNotification(comment, question.getCreator(), creator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_QUETION, question.getId());
@@ -66,8 +69,9 @@ public class CommentService {
             if (dbComent == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
-            commentMapper.insert(comment);
-
+            commentMapper.insertSelective(comment);
+            dbComent.setCommentCount(1L);
+            commentExtMapper.incCommentCount(dbComent);
             // 创建通知
             createNotification(comment, dbComent.getCommentator(), creator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT, question.getId());
         }
@@ -75,6 +79,9 @@ public class CommentService {
     }
 
     private void createNotification(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, Long outerId) {
+        if (comment.getCommentator() == receiver) {
+            return;
+        }
         Notification notification = new Notification();
         notification.setReceiver(receiver);
         notification.setOuterTitle(outerTitle);

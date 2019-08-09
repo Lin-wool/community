@@ -1,5 +1,6 @@
 package com.wool.community.mapper;
 
+import com.wool.community.dto.QuestionQueryDTO;
 import com.wool.community.model.Question;
 import com.wool.community.model.QuestionExample;
 import org.apache.ibatis.annotations.Param;
@@ -20,4 +21,8 @@ public interface QuestionExtMapper {
     int incView(Question record);
     int incComment(Question question);
     List<Question> selectRelated(Question question);
+
+    Integer countBySearch(QuestionQueryDTO search);
+
+    List<Question> selectBySearch(QuestionQueryDTO queryDTO);
 }

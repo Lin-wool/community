@@ -21,7 +21,7 @@ public class CommentDTO {
 
     private String content;
 
-    private Integer commentCount;
+    private Long commentCount;
 
     public User user;
 }

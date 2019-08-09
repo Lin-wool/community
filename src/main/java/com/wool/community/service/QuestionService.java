@@ -2,6 +2,7 @@ package com.wool.community.service;
 
 import com.wool.community.dto.PaginationDTO;
 import com.wool.community.dto.QuestionDTO;
+import com.wool.community.dto.QuestionQueryDTO;
 import com.wool.community.exception.CustomizeErrorCode;
 import com.wool.community.exception.CustomizeException;
 import com.wool.community.mapper.QuestionExtMapper;
@@ -39,11 +40,13 @@ public class QuestionService {
     /**
      * 返回问题传输对象（包含用户信息）
      *
+     *
+     * @param search
      * @param page
      * @param size
      * @return
      */
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO list(String search, Integer page, Integer size) {
 
         PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         // 审核page大小
@@ -51,7 +54,15 @@ public class QuestionService {
             page = 1;
         }
 
-        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
+        QuestionQueryDTO queryDTO = new QuestionQueryDTO();
+        if("".equals(search)){
+            search = null;
+        }
+        if(search !=null){
+            search = search.replaceAll(" ","|");
+        }
+        queryDTO.setSearch(search);
+        Integer totalCount = questionExtMapper.countBySearch(queryDTO);
         Integer totalPage = paginationDTO.getTotalPage(totalCount, size);
         if (page > totalPage && page != 1) {
             page = totalPage;
@@ -61,7 +72,9 @@ public class QuestionService {
         Integer offset = (page - 1) * size;
         QuestionExample questionExample = new QuestionExample();
         questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset,size));
+        queryDTO.setOffset(offset);
+        queryDTO.setSize(size);
+        List<Question> questionList = questionExtMapper.selectBySearch(queryDTO);
         List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
         for (Question question : questionList) {
             UserExample example = new UserExample();

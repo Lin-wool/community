@@ -23,3 +23,18 @@ mybatis:
     map-underscore-to-camel-case: true
   type-aliases-package: com.wool.community.mapper
   mapper-locations: classpath:/mapper/*.xml
+
+# 配置ucloud的属性
+ucloud:
+  ufile:
+#   公钥和私钥
+    public: TOKEN_729a9bf1-acc5-44ec-a408-4dc94815cd51
+    private: a53c60f5-e2ba-4baf-b2d3-d818849ebfe7
+#   桶名（自己的域名）
+    bucket: wool
+#   前缀
+    region: cn-bj
+#   后缀
+    suffix: ufileos.com
+#  过期时间
+    expires: 315360000
